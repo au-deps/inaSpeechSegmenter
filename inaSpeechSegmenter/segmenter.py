@@ -100,6 +100,7 @@ class DnnSegmenter:
     * outlabels: the labels associated the output of neural network models
     """
     def __init__(self, batch_size):
+        from tensorflow import keras
         # load the DNN model
         p = os.path.dirname(os.path.realpath(__file__)) + '/'
         self.nn = keras.models.load_model(p + self.model_fname, compile=False)        
@@ -191,7 +192,6 @@ class Segmenter:
         'detect_gender': if False, speech excerpts are return labelled as 'speech'
                 if True, speech excerpts are splitted into 'male' and 'female' segments
         """      
-        from tensorflow import keras
         from tensorflow.python.keras.backend import get_session        
         
         # test ffmpeg installation
