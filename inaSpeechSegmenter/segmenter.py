@@ -23,7 +23,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-
+import logging
 import os
 import sys
 
@@ -102,8 +102,10 @@ class DnnSegmenter:
     def __init__(self, batch_size):
         from tensorflow import keras
         # load the DNN model
+        logger.info('Loading model...') 
         p = os.path.dirname(os.path.realpath(__file__)) + '/'
-        self.nn = keras.models.load_model(p + self.model_fname, compile=False)        
+        self.nn = keras.models.load_model(p + self.model_fname, compile=False)
+        logger.info('Model {} loaded'.format(p))
         self.batch_size = batch_size
         
     def __call__(self, mspec, lseg, difflen = 0):
@@ -262,6 +264,7 @@ class Segmenter:
         if start_sec is None:
             start_sec = 0
         # do segmentation   
+        logger.info('Starting segmentation')
         return self.segment_feats(mspec, loge, difflen, start_sec)
 
     
