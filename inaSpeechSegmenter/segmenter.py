@@ -221,8 +221,6 @@ class Segmenter:
         require input corresponding to wav file sampled at 16000Hz
         with a single channel
         """
-        from tensorflow.python.keras.backend import clear_session  
-
         # perform energy-based activity detection
         lseg = []
         for lab, start, stop in _binidx2seglist(_energy_activity(loge)[::2]):
@@ -238,8 +236,6 @@ class Segmenter:
         # perform gender segmentation on speech segments
         if self.detect_gender:
             lseg = self.gender(mspec, lseg, difflen)
-
-        clear_session()
         
         return [(lab, start_sec + start * .02, start_sec + stop * .02) for lab, start, stop in lseg]
 
