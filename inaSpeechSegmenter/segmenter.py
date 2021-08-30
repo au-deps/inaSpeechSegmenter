@@ -44,6 +44,8 @@ from .viterbi_utils import pred2logemission, diag_trans_exp, log_trans_exp
 from .features import media2feats
 from .export_funcs import seg2csv, seg2textgrid
 
+from tensorflow.python.keras.backend import get_session
+
 
 
 def _energy_activity(loge, ratio=0.03):
@@ -199,7 +201,7 @@ class Segmenter:
             raise(Exception("""ffmpeg program not found"""))
         self.ffmpeg = ffmpeg
 
-#        self.graph = KB.get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
+        self.graph = get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
 
         
         # select speech/music or speech/music/noise voice activity detection engine
