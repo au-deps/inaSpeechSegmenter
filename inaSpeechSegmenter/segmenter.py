@@ -191,14 +191,14 @@ class Segmenter:
         'detect_gender': if False, speech excerpts are return labelled as 'speech'
                 if True, speech excerpts are splitted into 'male' and 'female' segments
         """      
-        from tensorflow.python.keras.backend import get_session        
+ #       from tensorflow.python.keras.backend import get_session        
         
         # test ffmpeg installation
         if shutil.which(ffmpeg) is None:
             raise(Exception("""ffmpeg program not found"""))
         self.ffmpeg = ffmpeg
 
-        self.graph = get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
+#        self.graph = get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
 
         
         # select speech/music or speech/music/noise voice activity detection engine
