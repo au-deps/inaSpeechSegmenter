@@ -28,7 +28,6 @@ import os
 import sys
 
 import numpy as np
-from tensorflow import keras
 from .thread_returning import ThreadReturning
 
 import shutil
@@ -43,9 +42,6 @@ from .viterbi_utils import pred2logemission, diag_trans_exp, log_trans_exp
 
 from .features import media2feats
 from .export_funcs import seg2csv, seg2textgrid
-
-from tensorflow.python.keras.backend import get_session
-
 
 
 def _energy_activity(loge, ratio=0.03):
@@ -195,7 +191,9 @@ class Segmenter:
         'detect_gender': if False, speech excerpts are return labelled as 'speech'
                 if True, speech excerpts are splitted into 'male' and 'female' segments
         """      
-
+        from tensorflow import keras
+        from tensorflow.python.keras.backend import get_session        
+        
         # test ffmpeg installation
         if shutil.which(ffmpeg) is None:
             raise(Exception("""ffmpeg program not found"""))
