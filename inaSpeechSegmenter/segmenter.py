@@ -191,7 +191,7 @@ class Segmenter:
         'detect_gender': if False, speech excerpts are return labelled as 'speech'
                 if True, speech excerpts are splitted into 'male' and 'female' segments
         """      
-        from tensorflow.python.keras.backend import get_session, clear_session       
+        from tensorflow.python.keras.backend import get_session       
         
         # test ffmpeg installation
         if shutil.which(ffmpeg) is None:
@@ -214,18 +214,14 @@ class Segmenter:
         if detect_gender:
             self.gender = Gender(batch_size)
             
-        clear_session()
-
-
+    
     def segment_feats(self, mspec, loge, difflen, start_sec):
         """
         do segmentation
         require input corresponding to wav file sampled at 16000Hz
         with a single channel
         """
-
-
-
+        from tensorflow.python.keras.backend import clear_session  
 
         # perform energy-based activity detection
         lseg = []
@@ -243,6 +239,8 @@ class Segmenter:
         if self.detect_gender:
             lseg = self.gender(mspec, lseg, difflen)
 
+        clear_session()
+        
         return [(lab, start_sec + start * .02, start_sec + stop * .02) for lab, start, stop in lseg]
 
 
