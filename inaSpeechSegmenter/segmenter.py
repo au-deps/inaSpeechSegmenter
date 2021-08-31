@@ -99,7 +99,14 @@ class DnnSegmenter:
     * outlabels: the labels associated the output of neural network models
     """
     def __init__(self, batch_size):
+        import tensorflow.compat.v1 as tf
+        from tensorflow.python.keras.backend import set_session
         from tensorflow import keras
+        # initialize session & graph
+        self.sess = tf.Session()
+        self.graph = tf.get_default_graph()
+        # set session
+        set_session(self.sess)
         # load the DNN model
         p = os.path.dirname(os.path.realpath(__file__)) + '/'
         self.nn = keras.models.load_model(p + self.model_fname, compile=False)
@@ -133,7 +140,9 @@ class DnnSegmenter:
 
         if len(batch) > 0:
             batch = np.concatenate(batch)
-            rawpred = self.nn.predict(batch, batch_size=self.batch_size)
+            with self.graph.as_default():
+                with self.sess.as_default():
+                    rawpred = self.nn.predict(batch, batch_size=self.batch_size)
 
         ret = []
         for lab, start, stop in lseg:
@@ -191,14 +200,14 @@ class Segmenter:
         'detect_gender': if False, speech excerpts are return labelled as 'speech'
                 if True, speech excerpts are splitted into 'male' and 'female' segments
         """      
-        from tensorflow.python.keras.backend import get_session       
+        # from tensorflow.python.keras.backend import get_session       
         
         # test ffmpeg installation
         if shutil.which(ffmpeg) is None:
             raise(Exception("""ffmpeg program not found"""))
         self.ffmpeg = ffmpeg
 
-        self.graph = get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
+        # self.graph = get_session().graph # To prevent the issue of keras with tensorflow backend for async tasks
 
         
         # select speech/music or speech/music/noise voice activity detection engine
