@@ -105,11 +105,12 @@ class DnnSegmenter:
         # initialize session & graph
         self.sess = tf.Session()
         self.graph = tf.get_default_graph()
-        # set session
-        set_session(self.sess)
-        # load the DNN model
-        p = os.path.dirname(os.path.realpath(__file__)) + '/'
-        self.nn = keras.models.load_model(p + self.model_fname, compile=False)
+        with self.graph.as_default():
+            # set session
+            set_session(self.sess)
+            # load the DNN model
+            p = os.path.dirname(os.path.realpath(__file__)) + '/'
+            self.nn = keras.models.load_model(p + self.model_fname, compile=False)
         self.batch_size = batch_size
         
     def __call__(self, mspec, lseg, difflen = 0):
